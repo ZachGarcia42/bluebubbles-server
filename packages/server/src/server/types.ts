@@ -124,8 +124,8 @@ export type AttachmentResponse = {
     hasLivePhoto?: boolean;
 };
 
-export type ValidTapback = "love" | "like" | "dislike" | "laugh" | "emphasize" | "question";
-export type ValidRemoveTapback = "-love" | "-like" | "-dislike" | "-laugh" | "-emphasize" | "-question";
+export type ValidTapback = "love" | "like" | "dislike" | "laugh" | "emphasize" | "question" | string;
+export type ValidRemoveTapback = "-love" | "-like" | "-dislike" | "-laugh" | "-emphasize" | "-question" | string;
 export enum ProgressStatus {
     NOT_STARTED = "NOT_STARTED",
     IN_PROGRESS = "IN_PROGRESS",

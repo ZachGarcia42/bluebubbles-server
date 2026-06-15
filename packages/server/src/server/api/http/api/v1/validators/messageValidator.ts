@@ -167,12 +167,21 @@ export class MessageValidator {
     static sendReactionRules = {
         chatGuid: "required|string",
         selectedMessageGuid: "required|string",
-        reaction: `required|string|in:${MessageInterface.possibleReactions.join(",")}`,
         partIndex: "numeric|min:0"
     };
 
     static async validateReaction(ctx: RouterContext, next: Next) {
         ValidateInput(ctx.request?.body, MessageValidator.sendReactionRules);
+        const reaction = ctx.request?.body?.reaction;
+        if (!reaction || typeof reaction !== "string") {
+            throw new BadRequest({ error: "Reaction is required and must be a string." });
+        }
+        const cleanReaction = reaction.startsWith("-") ? reaction.substring(1) : reaction;
+        const isEmoji = cleanReaction.startsWith("emoji:") || /[\p{Emoji}]/u.test(cleanReaction);
+        const isValid = MessageInterface.possibleReactions.includes(reaction) || isEmoji;
+        if (!isValid) {
+            throw new BadRequest({ error: `Invalid reaction! Must be one of: ${MessageInterface.possibleReactions.join(",")} or a custom emoji.` });
+        }
         await next();
     }
 

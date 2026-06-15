@@ -396,9 +396,19 @@ export class MessageInterface {
 
         // Rebuild the selected message text to make it what the reaction text
         // would be in the database
-        const prefix = (reaction as string).startsWith("-")
-            ? negativeReactionTextMap[reaction as string]
-            : reactionTextMap[reaction as string];
+        let prefix = "";
+        const isNegative = (reaction as string).startsWith("-");
+        const cleanReaction = isNegative ? (reaction as string).substring(1) : (reaction as string);
+        const isEmoji = cleanReaction.startsWith("emoji:") || /[\p{Emoji}]/u.test(cleanReaction);
+
+        if (isEmoji) {
+            const emoji = cleanReaction.startsWith("emoji:") ? cleanReaction.substring(6) : cleanReaction;
+            prefix = isNegative ? `Removed a reaction of ${emoji} from` : `Reacted with ${emoji} to`;
+        } else {
+            prefix = isNegative
+                ? negativeReactionTextMap[reaction as string]
+                : reactionTextMap[reaction as string];
+        }
 
         // If the message text is just the invisible char, we know it's probably just an attachment
         const text = message.universalText(false) ?? "";
