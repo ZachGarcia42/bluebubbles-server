@@ -159,7 +159,7 @@ export class MessageSerializer {
             balloonBundleId: message.balloonBundleId,
             associatedMessageGuid: message.associatedMessageGuid,
             associatedMessageType: message.associatedMessageEmoji
-                ? (message.associatedMessageType && (message.associatedMessageType.startsWith("-") || message.associatedMessageType.startsWith("3"))
+                ? (!!message.associatedMessageType && (message.associatedMessageType.startsWith("-") || message.associatedMessageType.startsWith("3"))
                     ? `-emoji:${message.associatedMessageEmoji}`
                     : `emoji:${message.associatedMessageEmoji}`)
                 : message.associatedMessageType,

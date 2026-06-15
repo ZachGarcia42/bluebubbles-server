@@ -177,7 +177,7 @@ export class MessageValidator {
             throw new BadRequest({ error: "Reaction is required and must be a string." });
         }
         const cleanReaction = reaction.startsWith("-") ? reaction.substring(1) : reaction;
-        const isEmoji = cleanReaction.startsWith("emoji:") || /[\p{Emoji}]/u.test(cleanReaction);
+        const isEmoji = cleanReaction.startsWith("emoji:") || cleanReaction.length > 0;
         const isValid = MessageInterface.possibleReactions.includes(reaction) || isEmoji;
         if (!isValid) {
             throw new BadRequest({ error: `Invalid reaction! Must be one of: ${MessageInterface.possibleReactions.join(",")} or a custom emoji.` });

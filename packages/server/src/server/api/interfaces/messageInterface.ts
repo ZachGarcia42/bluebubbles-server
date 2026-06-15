@@ -399,7 +399,7 @@ export class MessageInterface {
         let prefix = "";
         const isNegative = (reaction as string).startsWith("-");
         const cleanReaction = isNegative ? (reaction as string).substring(1) : (reaction as string);
-        const isEmoji = cleanReaction.startsWith("emoji:") || /[\p{Emoji}]/u.test(cleanReaction);
+        const isEmoji = cleanReaction.startsWith("emoji:") || cleanReaction.length > 0;
 
         if (isEmoji) {
             const emoji = cleanReaction.startsWith("emoji:") ? cleanReaction.substring(6) : cleanReaction;
