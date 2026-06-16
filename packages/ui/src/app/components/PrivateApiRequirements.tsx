@@ -49,7 +49,7 @@ export const PrivateApiRequirements = (): JSX.Element => {
             }, 1000);
             
             if (!requirements) return;
-            store.dispatch(setConfig({ name: 'private_api_requirements', value: requirements }));
+            store.dispatch(setConfig({ name: 'private_api_requirements', value: requirements, saveToDb: false }));
         });
     };
 

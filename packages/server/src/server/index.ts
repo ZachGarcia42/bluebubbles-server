@@ -183,9 +183,8 @@ class BlueBubblesServer extends EventEmitter {
         let status = true;
         if (isMinMojave) {
             const authStatus = getAuthStatus("full-disk-access");
-            if (authStatus === "authorized") {
-                status = true;
-            } else {
+            status = authStatus === "authorized";
+            if (!status) {
                 this.logger.debug(`FullDiskAccess Permission Status: ${authStatus}`);
             }
         }
@@ -1134,7 +1133,7 @@ class BlueBubblesServer extends EventEmitter {
         }
 
         // If the password changes, we need to make sure the clients connected to the socket are kicked.
-        if (prevConfig.password !== nextConfig.password) {
+        if (prevConfig.password !== nextConfig.password && this.httpService) {
             this.httpService.kickClients();
         }
 
@@ -1250,15 +1249,29 @@ class BlueBubblesServer extends EventEmitter {
     }
 
     async checkPermissions(): Promise<Array<NodeJS.Dict<any>>> {
+        let hasDiskAccess = false;
+        try {
+            hasDiskAccess = this.hasDiskAccess;
+        } catch (ex) {
+            this.logger.error(`Failed to check Full Disk Access permission: ${ex}`);
+        }
+
+        let hasAccessibility = false;
+        try {
+            hasAccessibility = systemPreferences.isTrustedAccessibilityClient(false);
+        } catch (ex) {
+            this.logger.error(`Failed to check Accessibility permission: ${ex}`);
+        }
+
         const output = [
             {
                 name: "Accessibility (Optional)",
-                pass: systemPreferences.isTrustedAccessibilityClient(false),
+                pass: hasAccessibility,
                 solution: "Open System Preferences > Security > Privacy > Accessibility, then add BlueBubbles"
             },
             {
                 name: "Full Disk Access",
-                pass: this.hasDiskAccess,
+                pass: hasDiskAccess,
                 solution:
                     "Open System Preferences > Security > Privacy > Full Disk Access, " +
                     "then add BlueBubbles. Lastly, restart BlueBubbles."

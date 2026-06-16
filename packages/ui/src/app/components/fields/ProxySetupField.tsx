@@ -49,7 +49,7 @@ export const ProxySetupField = ({ helpText, showAddress = true }: ProxySetupFiel
     const ngrokRef = useRef(null);
     const zrokRef = useRef(null);
     const alertRef = useRef(null);
-    const proxyService: string = (useAppSelector(state => state.config.proxy_service) ?? '').toLowerCase().replace(' ', '-');
+    const proxyService: string = (useAppSelector(state => state.config.proxy_service) ?? 'cloudflare').toLowerCase().replace(' ', '-');
     const address: string = useAppSelector(state => state.config.server_address) ?? '';
     const port: number = useAppSelector(state => state.config.socket_port) ?? 1234;
     const [dnsModalOpen, setDnsModalOpen] = useBoolean();

@@ -92,13 +92,13 @@ loadAlerts();
 // Load private API requirements
 getPrivateApiRequirements().then(requirements => {
     if (!requirements) return;
-    store.dispatch(setConfig({ name: 'private_api_requirements', value: requirements }));
+    store.dispatch(setConfig({ name: 'private_api_requirements', value: requirements, saveToDb: false }));
 });
 
 // Check permissions
 checkPermissions().then(permissions => {
     if (!permissions) return;
-    store.dispatch(setConfig({ name: 'permissions', value: permissions }));
+    store.dispatch(setConfig({ name: 'permissions', value: permissions, saveToDb: false }));
 });
 
 // Load the alerts from the server

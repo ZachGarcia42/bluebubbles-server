@@ -41,7 +41,7 @@ export const WalkthroughLayout = ({...rest}): JSX.Element => {
     const [openNgrokAlert, setOpenNgrokAlert] = useBoolean(false);
     const [step, setStep] = useState(0);
     const [completedSteps, setCompletedSteps] = useState([] as Array<number>);
-    const proxyService: string = useAppSelector(state => state.config.proxy_service ?? '');
+    const proxyService: string = (useAppSelector(state => state.config.proxy_service) ?? 'cloudflare').toLowerCase().replace(' ', '-');
     const ngrokToken: string = useAppSelector(state => state.config.ngrok_key ?? '');
     const password: string = useAppSelector(state => state.config.password ?? '');
     const bgColor = useBackground();

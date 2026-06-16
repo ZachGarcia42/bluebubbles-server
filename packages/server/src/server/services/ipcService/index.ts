@@ -305,15 +305,35 @@ export class IPCService extends Loggable {
         });
 
         ipcMain.handle("get-current-permissions", async (_, __) => {
+            let fullDiskAccess = false;
+            try {
+                fullDiskAccess = Server().hasDiskAccess;
+            } catch (ex) {
+                Server().log(`Failed to check Full Disk Access: ${ex}`, "error");
+            }
+
+            let accessibility = false;
+            try {
+                accessibility = systemPreferences.isTrustedAccessibilityClient(false);
+            } catch (ex) {
+                Server().log(`Failed to check Accessibility: ${ex}`, "error");
+            }
+
             return {
-                accessibility: systemPreferences.isTrustedAccessibilityClient(false),
-                full_disk_access: Server().hasDiskAccess
+                accessibility,
+                full_disk_access: fullDiskAccess
             };
         });
 
         ipcMain.handle("prompt_accessibility", async (_, __) => {
+            let abPerms = "denied";
+            try {
+                abPerms = systemPreferences.isTrustedAccessibilityClient(true) ? "authorized" : "denied";
+            } catch (ex) {
+                Server().log(`Failed to prompt Accessibility: ${ex}`, "error");
+            }
             return {
-                abPerms: systemPreferences.isTrustedAccessibilityClient(true) ? "authorized" : "denied"
+                abPerms
             };
         });
 

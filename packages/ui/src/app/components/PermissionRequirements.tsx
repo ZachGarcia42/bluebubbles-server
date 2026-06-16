@@ -51,7 +51,7 @@ export const PermissionRequirements = (): JSX.Element => {
             }, 1000);
 
             if (!permissions) return;
-            store.dispatch(setConfig({ name: 'permissions', value: permissions }));
+            store.dispatch(setConfig({ name: 'permissions', value: permissions, saveToDb: false }));
         });
     };
 
@@ -102,7 +102,7 @@ export const PermissionRequirements = (): JSX.Element => {
                                                 setShowAccessibilityProgress.off();
                                             }, 1000);
 
-                                            if (e.name === 'Accessibility') {
+                                            if (e.name.startsWith('Accessibility')) {
                                                 openAccessibilityPrefs();
                                             } else if (e.name === 'Full Disk Access') {
                                                 openFullDiskPrefs();
